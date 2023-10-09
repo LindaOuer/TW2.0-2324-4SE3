@@ -1,0 +1,11 @@
+{% for s in services | reverse %}
+  {% if s.id == 2 %}
+    {{ s.name | lower | capitalize }}
+    -
+    {{ s.desc}}
+    <br>
+  {% endif %}
+{% endfor %}
+{# This is a comment #}
+<img src="{{ asset('/images/Taha_Hussein.jpg') }}" alt="" >
+<a href="{{ path('service_show') }}" > Navigate </a>
