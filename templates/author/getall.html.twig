@@ -1,4 +1,8 @@
 {% for a in authors %}
     {{ a.username }} - {{ a.email }} <br>
     <a href="{{ path('author_getOne', {id: a.id}) }}" > Details </a> <br>
+
+    <a href="{{ path('author_update', {id: a.id}) }}" > Edit </a> <br>
+
+    <a href="{{ path('author_delete', {id: a.id}) }}" > Delete </a> <br>
 {% endfor %}

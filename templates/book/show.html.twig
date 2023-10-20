@@ -1,0 +1,20 @@
+<table>
+    <tr>
+        <th>Ref </th>
+        <th>Title</th>
+        <th>Publication Date</th>
+        <th>Published</th>
+        <th>Category</th>
+        <th>author</th>
+    </tr>
+    {% for book in books %}
+        <tr>
+        <td>{{ book.ref }}</td>
+        <td>{{ book.title }}</td>
+        <td>{{ book.publicationDate| date('Y/m/d') }}</td>
+        <td>{{ book.published }}</td>
+        <td>{{ book.category }}</td>
+        <td>{{ book.author.username }}</td>
+    </tr>
+    {% endfor %}
+</table>

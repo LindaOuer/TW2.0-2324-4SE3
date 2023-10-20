@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Author;
+use App\Form\AuthorType;
 use App\Repository\AuthorRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -77,5 +79,54 @@ class AuthorController extends AbstractController
         $em->flush();
 
         return new Response('Author Added');
+    }
+
+    #[Route('/addAuthorForm', name: 'author_add')]
+    public function addAuthor(Request $req, ManagerRegistry $manager): Response
+    {
+        $em = $manager->getManager();
+        $author = new Author;
+
+        // Appel au formulaire 
+        $form = $this->createForm(AuthorType::class, $author);
+        $form->handleRequest($req);
+        if ($form->isSubmitted()) {
+            $em->persist($author);
+            $em->flush();
+
+            return $this->redirectToRoute('author_getall');
+        }
+
+        return $this->renderForm('author/add.html.twig', ['f' => $form]);
+    }
+
+    #[Route('/updateAuthorForm/{id}', name: 'author_update')]
+    public function updateAuthor(Request $req, ManagerRegistry $manager, $id, AuthorRepository $repo): Response
+    {
+        $em = $manager->getManager();
+        $author = $repo->find($id);
+
+        // Appel au formulaire 
+        $form = $this->createForm(AuthorType::class, $author);
+        $form->handleRequest($req);
+        if ($form->isSubmitted()) {
+            $em->persist($author);
+            $em->flush();
+
+            return $this->redirectToRoute('author_getall');
+        }
+
+        return $this->renderForm('author/add.html.twig', ['f' => $form]);
+    }
+    #[Route('/author/delete/{id}', name: 'author_delete')]
+    public function deleteAuthor(ManagerRegistry $manager, $id, AuthorRepository $repo): Response
+    {
+        $author = $repo->find($id);
+
+        $em = $manager->getManager();
+        $em->remove($author);
+        $em->flush();
+
+        return $this->redirectToRoute('author_getAll');
     }
 }
